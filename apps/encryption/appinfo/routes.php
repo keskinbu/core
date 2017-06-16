@@ -55,7 +55,16 @@ namespace OCA\Encryption\AppInfo;
 		'name' => 'Status#getStatus',
 		'url' => '/ajax/getStatus',
 		'verb' => 'GET'
+	],
+	[
+		'name' => 'MasterKey#createNewMasterKey',
+		'url' => '/ajax/createNewMasterKey',
+		'verb' => 'POST'
+	],
+	[
+		'name' => 'MasterKey#reencryptFiles',
+		'url' => '/ajax/reencryptFiles',
+		'verb' => 'POST'
 	]
-
 
 ]]);

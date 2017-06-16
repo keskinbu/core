@@ -24,6 +24,8 @@ $(document).ready(function () {
 				$("#encryptHomeStorage, #encryptionSetRecoveryKey").addClass("hidden");
 				if($("#encryptionType").val().length === 0) {
 					$("#encryptionType").text("Encryption type: Master Key");
+					$("#newMasterKey").toggleClass('hidden');
+					$("#reEncryptFS").toggleClass('hidden');
 				}
 			}
 		} else if (encryptionType === "customkey") {
@@ -79,6 +81,19 @@ $(document).ready(function () {
 			});
 		}
 	});
+
+	$("#newMasterKey").click(function () {
+		$.post(
+			OC.generateUrl('/apps/encryption/ajax/createNewMasterKey')
+		);
+	});
+
+	$("#reEncryptFS").click(function () {
+		$.post(
+			OC.generateUrl('/apps/encryption/ajax/reencryptFiles')
+		);
+	});
+
 
 	$('input:button[name="enableRecoveryKey"]').click(function () {
 

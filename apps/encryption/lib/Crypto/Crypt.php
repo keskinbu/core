@@ -480,7 +480,9 @@ class Crypt {
 	private function checkSignature($data, $passPhrase, $expectedSignature) {
 		$signature = $this->createSignature($data, $passPhrase);
 		if (!hash_equals($expectedSignature, $signature)) {
-			throw new HintException('Bad Signature', $this->l->t('Bad Signature'));
+			if (\OC::$server->getAppConfig()->getValue('encryption', 'useMasterKey', 0) === 0) {
+				throw new HintException('Bad Signature', $this->l->t('Bad Signature'));
+			}
 		}
 	}
 

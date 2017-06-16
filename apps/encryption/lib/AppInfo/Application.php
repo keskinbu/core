@@ -24,6 +24,7 @@ namespace OCA\Encryption\AppInfo;
 
 
 use OC\Files\View;
+use OCA\Encryption\Controller\MasterKeyController;
 use OCA\Encryption\Controller\RecoveryController;
 use OCA\Encryption\Controller\SettingsController;
 use OCA\Encryption\Controller\StatusController;
@@ -193,6 +194,19 @@ class Application extends \OCP\AppFramework\App {
 				$server->getRequest(),
 				$server->getL10N($c->getAppName()),
 				$c->query('Session')
+			);
+		});
+
+		$container->registerService('MasterKeyController', function (IAppContainer $c) {
+			$server = $c->getServer();
+			return new MasterKeyController(
+				$c->getAppName(),
+				$server->getRequest(),
+				$c->query('Manager'),
+				$c->query('IUserManager'),
+				$c->query('View'),
+				$c->query('KeyManager'),
+				$c->query('Util')
 			);
 		});
 

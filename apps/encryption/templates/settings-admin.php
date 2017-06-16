@@ -23,6 +23,8 @@ style('encryption', 'settings-admin');
 			}
 			?>
 		</label>
+		<button id="newMasterKey" class="hidden"><?php p($l->t("Create new master key")); ?></button>
+		<button id="reEncryptFS" class="hidden"><?php p($l->t("Encrypt files")); ?></button>
 		<span id="encryptionKeySelection">
 			<select id="keyTypeId" name="keyType">
 				<option value="nokey"><?php p($l->t("Please select an encryption option"))?></option>

@@ -99,6 +99,18 @@ class DecryptAll {
 
 		if (empty($this->failed)) {
 			$this->output->writeln('all files could be decrypted successfully!');
+			//Now recreate new encryption
+			//Delete the encryption app
+			\OC::$server->getAppConfig()->deleteApp('encryption');
+			//Delete the files_encryption dir
+			$this->rootView->deleteAll('files_encryption');
+			\OC::$server->getConfig()->deleteAppValue('files_encryption','installed_version');
+
+			//Re-enable the encryption app
+			\OC_App::enable('encryption');
+			//We are interested in masterkey so set it.
+			\OC::$server->getAppConfig()->setValue('encryption','useMasterKey', '1');
+
 		} else {
 			$this->output->writeln('Files for following users couldn\'t be decrypted, ');
 			$this->output->writeln('maybe the user is not set up in a way that supports this operation: ');
@@ -241,6 +253,10 @@ class DecryptAll {
 				}
 			}
 		}
+
+		if (empty($this->failed)) {
+			$this->rootView->deleteAll("$uid/files_encryption");
+		}
 	}
 
 	/**
@@ -255,8 +271,10 @@ class DecryptAll {
 		$target = $path . '.decrypted.' . $this->getTimestamp();
 
 		try {
+			\OC::$server->getSession()->set('decryptAllCmd', true);
 			$this->rootView->copy($source, $target);
 			$this->rootView->rename($target, $source);
+			\OC::$server->getSession()->remove('decryptAllCmd');
 		} catch (DecryptionFailedException $e) {
 			if ($this->rootView->file_exists($target)) {
 				$this->rootView->unlink($target);

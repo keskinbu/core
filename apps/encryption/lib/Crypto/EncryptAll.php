@@ -293,8 +293,10 @@ class EncryptAll {
 		$target = $path . '.encrypted.' . time();
 
 		try {
+			\OC::$server->getSession()->set('encryptAllCmd', true);
 			$this->rootView->copy($source, $target);
 			$this->rootView->rename($target, $source);
+			\OC::$server->getSession()->set('encryptAllCmd', true);
 		} catch (DecryptionFailedException $e) {
 			if ($this->rootView->file_exists($target)) {
 				$this->rootView->unlink($target);
